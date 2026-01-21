@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mahjong Night – Setup</title>
+
+  <link rel="stylesheet" href="setup.css" />
+</head>
+<body>
+
+<div class="card">
+  <h1>🀄 Mahjong</h1>
+  <h2>Seat the Players</h2>
+
+  <div class="table-wrapper">
+    <div class="mahjong-table">
+
+      <div class="seat top">
+        <input placeholder="Player 1" />
+      </div>
+
+      <div class="seat right">
+        <input placeholder="Player 2" />
+      </div>
+
+      <div class="seat bottom">
+        <input placeholder="Player 3" />
+      </div>
+
+      <div class="seat left">
+        <input placeholder="Player 4 (optional)" />
+      </div>
+
+      <div class="table-center">🀄</div>
+    </div>
+  </div>
+
+  <div class="settings">
+    <div class="setting-row">
+      <label>Chip Value ($)</label>
+      <input type="number" step="0.01" id="chipValue" value="0.25" />
+    </div>
+
+    <div class="setting-row">
+      <label>Starting Chips</label>
+      <input type="number" id="startingChips" value="0" />
+    </div>
+  </div>
+
+  <button onclick="startGame()">Start Game ▶</button>
+
+  <div class="note">
+    Minimum 3 players • Table view setup • Values carry into the game
+  </div>
+</div>
+
+<script src="setup.js"></script>
+</body>
+</html>
