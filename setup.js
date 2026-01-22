@@ -9,18 +9,16 @@ function startGame() {
   const chipValue = Number(document.getElementById("chipValue").value);
   const startingChips = Number(document.getElementById("startingChips").value);
 
-  // Read names from table inputs
   const inputs = document.querySelectorAll(".seat input");
 
   players.forEach((p, i) => {
     p.name = inputs[i].value.trim();
   });
 
-  // Keep only players with names
   players = players.filter(p => p.name !== "");
 
   if (players.length < 3) {
-    alert("You need at least 3 players to start.");
+    alert("You need at least 3 players.");
     return;
   }
 

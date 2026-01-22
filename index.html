@@ -4,13 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mahjong Night – Setup</title>
-
   <link rel="stylesheet" href="setup.css" />
 </head>
 <body>
 
 <div class="card">
-  <h1>🀄 Mahjong</h1>
+  <h1>🀄 Mahjong Night</h1>
   <h2>Seat the Players</h2>
 
   <div class="table-wrapper">
@@ -39,7 +38,7 @@
   <div class="settings">
     <div class="setting-row">
       <label>Chip Value ($)</label>
-      <input type="number" step="0.01" id="chipValue" value="0.25" />
+      <input type="number" id="chipValue" step="0.01" value="0.25" />
     </div>
 
     <div class="setting-row">
@@ -50,9 +49,7 @@
 
   <button onclick="startGame()">Start Game ▶</button>
 
-  <div class="note">
-    Minimum 3 players • Table view setup • Values carry into the game
-  </div>
+  <p class="note">Minimum 3 players required</p>
 </div>
 
 <script src="setup.js"></script>
