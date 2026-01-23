@@ -1,8 +1,8 @@
 let players = [
-  { name: "", chips: 0, stars: 0, bonusStars: 0 },
-  { name: "", chips: 0, stars: 0, bonusStars: 0 },
-  { name: "", chips: 0, stars: 0, bonusStars: 0 },
-  { name: "", chips: 0, stars: 0, bonusStars: 0 }
+  { name: "", chips: 0, markers: 0, bonusMarkers: 0 },
+  { name: "", chips: 0, markers: 0, bonusMarkers: 0 },
+  { name: "", chips: 0, markers: 0, bonusMarkers: 0 },
+  { name: "", chips: 0, markers: 0, bonusMarkers: 0 }
 ];
 
 function startGame() {
@@ -24,8 +24,8 @@ function startGame() {
 
   players.forEach(p => {
     p.chips = startingChips;
-    p.stars = 0;
-    p.bonusStars = 0;
+    p.markers = 0;
+    p.bonusMarkers = 0;
   });
 
   localStorage.setItem("mahjongPlayers", JSON.stringify(players));

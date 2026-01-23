@@ -1,27 +1,220 @@
-body {
-  margin: 0;
-  font-family: "Segoe UI", sans-serif;
-  background: radial-gradient(circle at top, #1b1f3b, #090b1a);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
+:root {
+  --green: #b7e4c7;
+  --green-dark: #74c69d;
+  --green-soft: #e9f5ee;
+  --white: #ffffff;
+  --text-dark: #1b4332;
+  --glass: rgba(255,255,255,0.75);
 }
 
-.card {
-  width: 90%;
-  max-width: 700px;
-  background: rgba(255,255,255,0.12);
-  backdrop-filter: blur(14px);
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #e9f5ee, #d8f3dc);
+  color: var(--text-dark);
+}
+
+/* TOP BAR */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 32px;
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.top-bar h1 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.top-bar button {
+  background: transparent;
+  border: 1px solid var(--green-dark);
+  padding: 8px 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.top-bar button:hover {
+  background: var(--green-soft);
+}
+
+/* PAGE */
+.container {
+  max-width: 1200px;
+  margin: 32px auto;
+  padding: 20px;
+}
+
+.round-title {
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+/* PLAYER TRACKER */
+.player-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.player-card {
+  background: var(--white);
+  border-radius: 22px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  animation: fadeUp 0.4s ease;
+  transition: transform 0.2s ease;
+}
+
+.player-card:hover {
+  transform: translateY(-4px);
+}
+
+.player-card h3 {
+  margin: 0 0 6px;
+  font-weight: 600;
+}
+
+.player-card .money {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* ENTRIES */
+.entry {
+  margin-top: 28px;
+  background: var(--glass);
   border-radius: 26px;
-  padding: 30px;
+  padding: 18px;
+  animation: fadeUp 0.4s ease;
+}
+
+.entry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.entry-player {
+  background: var(--white);
+  border-radius: 18px;
+  padding: 14px;
+  text-align: center;
+  transition: box-shadow 0.2s ease;
+}
+
+.entry-player:hover {
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.entry-player input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-weight: 600;
+}
+
+.money-preview {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin-top: 6px;
+}
+
+/* STARS */
+.stars-box {
+  margin-top: 32px;
+  background: var(--glass);
+  border-radius: 26px;
+  padding: 18px;
+}
+
+.star-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.star-row input {
+  width: 80px;
+  border-radius: 12px;
+  padding: 6px;
   text-align: center;
 }
 
-.player {
-  margin: 10px 0;
-  padding: 10px;
+/* BUTTONS */
+button {
+  font-family: inherit;
+}
+
+.primary-btn {
+  margin-top: 24px;
+  padding: 14px 28px;
+  border-radius: 22px;
+  border: none;
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+}
+
+.secondary-btn {
+  margin-top: 18px;
+  background: transparent;
+  border: 1px dashed var(--green-dark);
+  padding: 12px 22px;
+  border-radius: 18px;
+  cursor: pointer;
+}
+
+/* DELETE ENTRY BUTTON */
+.delete-entry {
+  margin-top: 12px;
+  padding: 8px 14px;
+  background: #ffe5e5; /* light red/pink background */
+  color: #d9534f; /* red text */
+  border: 1px solid #d9534f;
   border-radius: 14px;
-  background: rgba(255,255,255,0.15);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-entry:hover {
+  background: #f2c2c2; /* slightly darker on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+}
+
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

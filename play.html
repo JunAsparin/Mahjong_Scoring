@@ -2,20 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Mahjong Night – Play</title>
+  <title>Mahjong Score Tracker</title>
   <link rel="stylesheet" href="play.css" />
 </head>
 <body>
 
-<div class="card">
-  <h1>Round <span id="roundNumber">1</span></h1>
+<header class="top-bar">
+  <h1>Mahjong Score Tracker</h1>
+  <button id="restartGame">Restart</button>
+</header>
 
-  <div id="players"></div>
+<div class="container">
 
-  <h3>Round Winner</h3>
-  <select id="winnerSelect"></select>
+  <h2 class="round-title">Round <span id="roundNumber">1</span></h2>
 
-  <button onclick="endRound()">End Round</button>
+  <div id="playerCards" class="player-cards"></div>
+
+  <div id="entries"></div>
+
+  <button id="addEntry" class="secondary-btn">Add Entry</button>
+
+  <div class="stars-box">
+    <h3>Jai Alai Stars</h3>
+    <div id="starInputs"></div>
+  </div>
+
+  <button id="endRound" class="primary-btn">End Round</button>
+
 </div>
 
 <script src="play.js"></script>
