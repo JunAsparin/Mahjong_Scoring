@@ -197,9 +197,33 @@ document.getElementById("restartGame").onclick = () => {
   window.location.href = "index.html";
 };
 
+function renderPlayerCards(players, chipValue) {
+  const container = document.getElementById("playerCards");
+  container.innerHTML = "";
+
+  players.forEach(p => {
+    const money = (p.chips * chipValue).toFixed(2);
+
+    const card = document.createElement("div");
+    card.className = "player-card";
+
+    card.innerHTML = `
+      <h3>${p.name}</h3>
+      <div class="player-stats">
+        <span>Chips: ${p.chips}</span>
+        <span>$${money}</span>
+        <span>Markers: ${p.markers}</span>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
 
 
 // ---------- START ----------
 renderPlayers();
 renderMarkers();
 addEntry();
+
