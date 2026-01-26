@@ -37,3 +37,4 @@ function startGame() {
   // Go to game
   window.location.href = "play.html";
 }
+

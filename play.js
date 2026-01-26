@@ -3,10 +3,14 @@ let players = JSON.parse(localStorage.getItem("mahjongPlayers")) || [];
 let chipValue = Number(localStorage.getItem("chipValue")) || 0.25;
 let round = Number(localStorage.getItem("currentRound")) || 1;
 
+players.forEach(p => {
+  if (p.markers == null) p.markers = 0;
+});
+
 // ---------- DOM ----------
 const playerCards = document.getElementById("playerCards");
 const entriesDiv = document.getElementById("entries");
-const starInputs = document.getElementById("starInputs");
+const markerInputs = document.getElementById("starInputs");
 const roundLabel = document.getElementById("roundNumber");
 
 // ---------- INIT ----------
@@ -17,128 +21,154 @@ let roundEntries = [];
 function renderPlayers() {
   playerCards.innerHTML = "";
 
-  players.forEach(player => {
+  players.forEach(p => {
     const card = document.createElement("div");
     card.className = "player-card";
-
     card.innerHTML = `
-      <h3>${player.name}</h3>
-      <div>${player.chips} chips</div>
-      <div class="money">$${(player.chips * chipValue).toFixed(2)}</div>
-      <div>Stars: ${player.stars}</div>
+      <h3>${p.name}</h3>
+      <div>${p.chips} chips</div>
+      <div class="money">$${(p.chips * chipValue).toFixed(2)}</div>
+      <div>Markers: ${p.markers}</div>
     `;
-
     playerCards.appendChild(card);
   });
 }
 
-// ---------- ENTRY CREATION ----------
-// ---------- ENTRY CREATION ----------
-// ---------- ENTRY CREATION ----------
+// ---------- ENTRY LOGIC ----------
+function setupEntryLogic(entry) {
+  const inputs = Array.from(entry.querySelectorAll("input"));
+  const moneyLabels = Array.from(entry.querySelectorAll(".money-preview"));
+
+  let activeWinner = null;
+
+  inputs.forEach((input, index) => {
+    input.addEventListener("input", () => {
+      let val = Math.round(Number(input.value) || 0);
+
+      // If this input is positive, it becomes the winner
+      if (val > 0) {
+        activeWinner = index;
+      }
+
+      // If no active winner, reset visuals only
+      if (activeWinner === null) {
+        moneyLabels.forEach(l => (l.textContent = "$0.00"));
+        return;
+      }
+
+      // If editing a loser, do nothing
+      if (index !== activeWinner) return;
+
+      const playersCount = inputs.length;
+      const losers = playersCount - 1;
+
+      if (val % losers !== 0) return;
+
+      const lossEach = -(val / losers);
+
+      inputs.forEach((inp, i) => {
+        if (i === activeWinner) {
+          inp.value = val;
+          moneyLabels[i].textContent =
+            "+$" + (val * chipValue).toFixed(2);
+        } else {
+          inp.value = lossEach;
+          moneyLabels[i].textContent =
+            "$" + (lossEach * chipValue).toFixed(2);
+        }
+      });
+    });
+  });
+}
+
+// ---------- ADD ENTRY ----------
 function addEntry() {
   const entry = document.createElement("div");
   entry.className = "entry";
 
   entry.innerHTML = `
     <div class="entry-grid">
-      ${players.map((p, i) => `
+      ${players.map(
+        (p, i) => `
         <div class="entry-player">
           <strong>${p.name}</strong>
           <input type="number" step="1" value="0" data-index="${i}">
           <div class="money-preview">$0.00</div>
         </div>
-      `).join("")}
+      `
+      ).join("")}
     </div>
   `;
 
-  // Only add delete button if this is NOT the original entry
-  if (roundEntries.length > 0) { // first entry is original
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Delete Entry";
-    deleteBtn.className = "delete-entry";
-
-    deleteBtn.addEventListener("click", () => {
+  // Delete button (not first entry)
+  if (roundEntries.length > 0) {
+    const del = document.createElement("button");
+    del.className = "delete-entry";
+    del.textContent = "Delete Entry";
+    del.onclick = () => {
       entriesDiv.removeChild(entry);
       roundEntries = roundEntries.filter(e => e !== entry);
-    });
-
-    entry.appendChild(deleteBtn);
+    };
+    entry.appendChild(del);
   }
 
-  // Update money preview on input
-  entry.querySelectorAll("input").forEach(input => {
-    input.addEventListener("input", () => {
-      input.value = Math.round(Number(input.value) || 0);
-      const money = input.value * chipValue;
-      input.nextElementSibling.textContent =
-        (money >= 0 ? "+" : "") + "$" + money.toFixed(2);
-    });
-  });
+  setupEntryLogic(entry);
 
   entriesDiv.appendChild(entry);
   roundEntries.push(entry);
 }
 
-
-
-// ---------- STAR INPUTS ----------
-function renderStars() {
-  starInputs.innerHTML = "";
-
+// ---------- MARKERS ----------
+function renderMarkers() {
+  markerInputs.innerHTML = "";
   players.forEach((p, i) => {
     const row = document.createElement("div");
     row.className = "star-row";
-
     row.innerHTML = `
       <span>${p.name}</span>
       <input type="number" min="0" step="1" value="0" data-index="${i}">
     `;
-
-    starInputs.appendChild(row);
+    markerInputs.appendChild(row);
   });
 }
 
-// ---------- APPLY ROUND ----------
+// ---------- END ROUND ----------
 function endRound() {
-
-  // Apply all entries
   roundEntries.forEach(entry => {
     const inputs = entry.querySelectorAll("input");
-    let winnerIndex = -1;
+
+    let winner = -1;
     let winChips = 0;
 
-    inputs.forEach((input, i) => {
-      const value = Number(input.value);
-      if (value > 0) {
-        winnerIndex = i;
-        winChips = value;
+    inputs.forEach((inp, i) => {
+      const v = Number(inp.value);
+      if (v > 0) {
+        winner = i;
+        winChips = v;
       }
     });
 
-    if (winnerIndex === -1) return;
+    if (winner === -1) return;
 
-    const loss = winChips / (players.length - 1);
-    if (!Number.isInteger(loss)) {
-      alert("Invalid chip split");
-      return;
+    const lossEach = winChips / (players.length - 1);
+    if (!Number.isInteger(lossEach)) {
+      alert("Invalid chip split.");
+      throw new Error("Invalid split");
     }
 
-    players[winnerIndex].chips += winChips;
-
+    players[winner].chips += winChips;
     players.forEach((p, i) => {
-      if (i !== winnerIndex) {
-        p.chips -= loss;
-      }
+      if (i !== winner) p.chips -= lossEach;
     });
   });
 
-  // Apply stars
+  // Apply markers
   document.querySelectorAll("#starInputs input").forEach(input => {
-    players[input.dataset.index].stars += Number(input.value);
+    players[input.dataset.index].markers += Number(input.value);
   });
 
-  // Check Jai Alai
-  if (players.some(p => p.stars >= 5)) {
+  // Jai Alai check
+  if (players.some(p => p.markers >= 5)) {
     localStorage.setItem("mahjongPlayers", JSON.stringify(players));
     window.location.href = "summary.html";
     return;
@@ -149,24 +179,13 @@ function endRound() {
   localStorage.setItem("currentRound", round);
   localStorage.setItem("mahjongPlayers", JSON.stringify(players));
 
-  // Reset round UI
   roundEntries = [];
   entriesDiv.innerHTML = "";
 
   renderPlayers();
-  renderStars();
-  flashCards();
-
+  renderMarkers();
   roundLabel.textContent = round;
   addEntry();
-}
-
-// ---------- VISUAL FEEDBACK ----------
-function flashCards() {
-  document.querySelectorAll(".player-card").forEach(card => {
-    card.style.boxShadow = "0 0 0 2px #74c69d inset";
-    setTimeout(() => card.style.boxShadow = "", 300);
-  });
 }
 
 // ---------- BUTTONS ----------
@@ -178,7 +197,9 @@ document.getElementById("restartGame").onclick = () => {
   window.location.href = "index.html";
 };
 
+
+
 // ---------- START ----------
 renderPlayers();
-renderStars();
+renderMarkers();
 addEntry();
