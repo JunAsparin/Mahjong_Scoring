@@ -10,8 +10,6 @@ body {
   color: #1f2937;
 }
 
-
-
 :root {
   --green: #b7e4c7;
   --green-dark: #74c69d;
@@ -67,6 +65,8 @@ body {
   max-width: 1200px;
   margin: 32px auto;
   padding: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .round-title {
@@ -204,8 +204,8 @@ button {
 .delete-entry {
   margin-top: 12px;
   padding: 8px 14px;
-  background: #ffe5e5; /* light red/pink background */
-  color: #d9534f; /* red text */
+  background: #ffe5e5;
+  color: #d9534f;
   border: 1px solid #d9534f;
   border-radius: 14px;
   font-size: 0.85rem;
@@ -215,11 +215,10 @@ button {
 }
 
 .delete-entry:hover {
-  background: #f2c2c2; /* slightly darker on hover */
+  background: #f2c2c2;
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(0,0,0,0.1);
 }
-
 
 /* ANIMATIONS */
 @keyframes fadeUp {
@@ -316,3 +315,28 @@ button {
   border-top: 1px solid #d1fae5;
 }
 
+/* ========================= */
+/* ANIMATED BACKGROUND LAYER */
+/* ========================= */
+
+.animated-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(183,228,199,0.35) 0 2px, transparent 3px),
+    radial-gradient(circle at 70% 60%, rgba(183,228,199,0.3) 0 2px, transparent 3px),
+    radial-gradient(circle at 40% 80%, rgba(183,228,199,0.25) 0 2px, transparent 3px);
+  background-size: 220px 220px;
+  animation: bgFloat 18s linear infinite;
+}
+
+@keyframes bgFloat {
+  from {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  to {
+    background-position: 0 -220px, 0 -440px, 0 -660px;
+  }
+}
